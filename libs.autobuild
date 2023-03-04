@@ -1,0 +1,21 @@
+cmake_package 'fencis/basix'
+cmake_package 'fencis/dolfinx' do |pkg|
+    pkg.depends_on 'fencis/basix'
+end
+
+import_package 'fencis/docs'
+import_package 'fencis/web'
+
+python_package 'fencis/ffcx' do |pkg|
+    pkg.depends_on 'fencis/ufl'
+    pkg.depends_on 'fencis/basix'
+end
+    
+python_package 'fencis/spack'
+python_package 'fencis/ufl'
+
+
+metapackage 'ffcx', 'fencis/ffcx'
+metapackage 'spack', 'fencis/spack'
+metapackage 'ufl', 'fencis/ufl'
+

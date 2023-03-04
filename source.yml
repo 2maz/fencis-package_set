@@ -1,0 +1,5 @@
+name: fenics
+
+version_control:
+    - fenics/.*:
+      github: fenics/$PACKAGE_BASENAME
