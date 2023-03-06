@@ -16,7 +16,9 @@ end
 
 
 sub_package 'fenics/basix', 'cpp', 'cmake_package'
-sub_package 'fenics/basix', 'python', 'python_package'
+sub_package 'fenics/basix', 'python', 'python_package' do |pkg|
+    pkg.depends_on 'fenics/basix/cpp'
+end
 
 metapackage 'fenics/basix',
     'fenics/basix/cpp', 'fenics/basix/python'
@@ -43,7 +45,6 @@ sub_package 'fenics/dolfinx', 'python', 'python_package' do |pkg|
     pkg.depends_on 'scientific_computing/petsc4py'
     pkg.depends_on 'cffi'
     pkg.depends_on 'mpi4py'
-
 end
 
 metapackage 'fenics/dolfinx',
