@@ -4,6 +4,16 @@ version_control:
     - fenics/.*:
       github: fenics/$PACKAGE_BASENAME
 
+    # interactive true means that no multi-threaded pulls from this repo can be done
+    - fenics/basix/.*:
+      github: fenics/basix
+      interactive: true
+
+    # interactive true means that no multi-threaded pulls from this repo can be done
+    - fenics/dolfinx/.*:
+      github: fenics/dolfinx
+      interactive: true
+
 
     - graph/kahip:
       github: kahip/kahip

@@ -1,4 +1,4 @@
-def sub_package(baseDir, subDir = "")
+def sub_package(baseDir, subDir = "", type= :cmake_package)
     baseDir.chomp!("/")
 
     if subDir.empty?
@@ -8,24 +8,22 @@ def sub_package(baseDir, subDir = "")
         prefixDir = baseDir + "-submodule" + "/" + subDir if Autoproj.config.separate_prefixes?
     end
 
-    cmake_package srcDir do |pkg|
+    send(type, srcDir) do |pkg|
         pkg.importdir = baseDir
-        pkg.prefix = prefixDir if prefixDir
-        if File.exist?(File.join(pkg.srcdir, "setup.py"))
-            bin, version, sitelib = Rock.activate_python_path(pkg)
-            pkg.define 'PYTHON_EXECUTABLE', bin if bin
-            pkg.define 'BINDINGS_PYTHON', bin
-        end
+        yield pkg if block_given?
     end
 end
 
 
-cmake_package 'fenics/basix/cpp'
-python_package 'fenics/basix/python' do |pkg|
-    pkg.depends_on 'fenics/basix/cpp'
-end
-cmake_package 'fenics/dolfinx/cpp' do |pkg|
-    pkg.depends_on 'fenics/basix/python'
+sub_package 'fenics/basix', 'cpp', 'cmake_package'
+sub_package 'fenics/basix', 'python', 'python_package'
+
+metapackage 'fenics/basix',
+    'fenics/basix/cpp', 'fenics/basix/python'
+
+
+sub_package 'fenics/dolfinx', 'cpp', 'cmake_package' do |pkg|
+    pkg.depends_on 'fenics/basix'
     pkg.depends_on 'mpi'
     pkg.depends_on 'boost'
     pkg.depends_on 'communication/adios2'
@@ -35,13 +33,24 @@ cmake_package 'fenics/dolfinx/cpp' do |pkg|
     pkg.depends_on 'slepc'
     pkg.depends_on 'scotch'
     pkg.depends_on 'fenics/ffcx'
+
+    pkg.depends_on 'catch2'
 end
 
-python_package 'fenics/dolfinx/python' do |pkg|
+sub_package 'fenics/dolfinx', 'python', 'python_package' do |pkg|
     pkg.depends_on 'fenics/dolfinx/cpp'
-    pkg.depends_on 'fenics/basix/python'
+    pkg.depends_on 'fenics/basix'
     pkg.depends_on 'petsc4py'
+    pkg.depends_on 'cffi'
+
+    pkg.post_import do
+        # Ensure that petsc is installed before petsc4py
+        Autoproj.workspace.os_package_installer.install(["petsc"])
+    end
 end
+
+metapackage 'fenics/dolfinx',
+    'fenics/dolfinx/cpp', 'fenics/dolfinx/python'
 
 import_package 'fenics/docs'
 import_package 'fenics/web'

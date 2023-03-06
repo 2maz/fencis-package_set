@@ -3,6 +3,9 @@ ap-features: pip
 boost:
     debian,ubuntu: libboost-all-dev
 
+catch2:
+    debian,ubuntu: catch2
+
 cffi: pip
 cardiac-mps: pip
 daiquiri: pip
@@ -20,7 +23,10 @@ opencv-python: pip
 
 parmetis:
     debian,ubuntu: libparmetis-dev
+
+petsc: pip
 petsc4py: pip
+
 pugixml:
     debian,ubuntu: libpugixml-dev
 
