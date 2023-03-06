@@ -16,6 +16,7 @@ hdf5:
 
 h5py: pip
 matplotlib: pip
+mpi4py: pip
 numba: pip
 numpy: pip
 opencv-contrib-python: pip
@@ -23,9 +24,6 @@ opencv-python: pip
 
 parmetis:
     debian,ubuntu: libparmetis-dev
-
-petsc: pip
-petsc4py: pip
 
 pugixml:
     debian,ubuntu: libpugixml-dev

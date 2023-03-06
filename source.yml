@@ -26,3 +26,15 @@ version_control:
 
     - communication/adios2:
       github: ornladios/ADIOS2
+
+    - scientific_computing/petsc:
+      github: petsc/petsc.git
+      branch:
+      tag: v3.18.5
+      interactive: true
+
+    - scientific_computing/petsc4py:
+      github: petsc/petsc.git
+      branch:
+      tag: v3.18.5
+      interactive: true
