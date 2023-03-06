@@ -85,8 +85,8 @@ metapackage 'petsc', 'scientific_computing/petsc'
 metapackage 'petsc4py', 'scientific_computing/petsc4py'
 
 cmake_package 'graph/kahip'
-cmake_package 'graph/mt-kahip'
-cmake_package 'graph/kaminpar'
+#cmake_package 'graph/mt-kahip'
+#cmake_package 'graph/kaminpar'
 
 cmake_package 'communication/adios2'
 
