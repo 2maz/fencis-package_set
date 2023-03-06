@@ -1,22 +1,44 @@
 ap-features: pip
+
+boost:
+    debian,ubuntu: libboost-all-dev
+
+cffi: pip
 cardiac-mps: pip
 daiquiri: pip
 dask-image: pip
 dask: pip
+hdf5:
+    debian,ubuntu: hdf5-tools
+
 h5py: pip
 matplotlib: pip
 numba: pip
 numpy: pip
 opencv-contrib-python: pip
 opencv-python: pip
+
+parmetis:
+    debian,ubuntu: libparmetis-dev
+petsc4py: pip
+pugixml:
+    debian,ubuntu: libpugixml-dev
+
 scipy: pip
+slepc:
+    debian,ubuntu: slepc64-dev
+scotch:
+    debian,ubuntu: scotch
+
 tqdm: pip
 typer: pip
 typing-extensions: pip
 
-
 pybind11:
     debian,ubuntu: python3-pybind11
     pip: pybind11
+
+mpi:
+    debian,ubuntu: mpi-default-dev
 
 

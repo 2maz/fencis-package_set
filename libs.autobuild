@@ -1,21 +1,69 @@
-cmake_package 'fencis/basix'
-cmake_package 'fencis/dolfinx' do |pkg|
-    pkg.depends_on 'fencis/basix'
+def sub_package(baseDir, subDir = "")
+    baseDir.chomp!("/")
+
+    if subDir.empty?
+        srcDir = baseDir
+    else
+        srcDir = File.join(baseDir, subDir)
+        prefixDir = baseDir + "-submodule" + "/" + subDir if Autoproj.config.separate_prefixes?
+    end
+
+    cmake_package srcDir do |pkg|
+        pkg.importdir = baseDir
+        pkg.prefix = prefixDir if prefixDir
+        if File.exist?(File.join(pkg.srcdir, "setup.py"))
+            bin, version, sitelib = Rock.activate_python_path(pkg)
+            pkg.define 'PYTHON_EXECUTABLE', bin if bin
+            pkg.define 'BINDINGS_PYTHON', bin
+        end
+    end
 end
 
-import_package 'fencis/docs'
-import_package 'fencis/web'
 
-python_package 'fencis/ffcx' do |pkg|
-    pkg.depends_on 'fencis/ufl'
-    pkg.depends_on 'fencis/basix'
+cmake_package 'fenics/basix/cpp'
+python_package 'fenics/basix/python' do |pkg|
+    pkg.depends_on 'fenics/basix/cpp'
+end
+cmake_package 'fenics/dolfinx/cpp' do |pkg|
+    pkg.depends_on 'fenics/basix/python'
+    pkg.depends_on 'mpi'
+    pkg.depends_on 'boost'
+    pkg.depends_on 'communication/adios2'
+    pkg.depends_on 'graph/kahip'
+    pkg.depends_on 'parmetis'
+    pkg.depends_on 'pugixml'
+    pkg.depends_on 'slepc'
+    pkg.depends_on 'scotch'
+    pkg.depends_on 'fenics/ffcx'
+end
+
+python_package 'fenics/dolfinx/python' do |pkg|
+    pkg.depends_on 'fenics/dolfinx/cpp'
+    pkg.depends_on 'fenics/basix/python'
+    pkg.depends_on 'petsc4py'
+end
+
+import_package 'fenics/docs'
+import_package 'fenics/web'
+
+python_package 'fenics/ffcx' do |pkg|
+    pkg.depends_on 'fenics/ufl'
 end
     
-python_package 'fencis/spack'
-python_package 'fencis/ufl'
+python_package 'fenics/spack'
+python_package 'fenics/ufl' do |pkg|
+    pkg.depends_on 'fenics/basix/python'
+end
 
 
-metapackage 'ffcx', 'fencis/ffcx'
-metapackage 'spack', 'fencis/spack'
-metapackage 'ufl', 'fencis/ufl'
+metapackage 'fenics-basix', 'fenics/basix/python'
+metapackage 'fenics-ffcx', 'fenics/ffcx'
+metapackage 'fenics-spack', 'fenics/spack'
+metapackage 'fenics-ufl', 'fenics/ufl'
+
+cmake_package 'graph/kahip'
+cmake_package 'graph/mt-kahip'
+cmake_package 'graph/kaminpar'
+
+cmake_package 'communication/adios2'
 
